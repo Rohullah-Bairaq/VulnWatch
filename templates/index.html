@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#101722">
+  <title>VulnWatch | Vulnerability Management</title>
+  <link rel="stylesheet" href="/static/styles.css">
+  <link rel="stylesheet" href="/static/dark-theme.css">
+  <script src="/static/app.js" defer></script>
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar">
+      <a class="brand" href="/" aria-label="VulnWatch home">
+        <span class="brand-mark">V</span><span>Vuln<span class="brand-light">Watch</span></span>
+      </a>
+      <div class="workspace-label">SECURITY OPERATIONS</div>
+      <nav class="side-nav" aria-label="Main navigation">
+        <a class="nav-item active" href="#overview"><span>◫</span> Overview</a>
+        <a class="nav-item" href="#findings"><span>⌁</span> Findings</a>
+        <a class="nav-item" href="#assets"><span>▦</span> Assets</a>
+        <a class="nav-item" href="#intelligence"><span>◎</span> CVE Intelligence</a>
+        <a class="nav-item" href="#imports"><span>⇧</span> Scan Imports</a>
+      </nav>
+      <div class="sidebar-bottom">
+        <span class="status-dot"></span><span>Local workspace</span>
+        <small>VULNWATCH MVP</small>
+      </div>
+    </aside>
+
+    <main class="main-content">
+      <header class="topbar">
+        <div><span class="eyebrow">SECURITY POSTURE</span><h1>Overview</h1></div>
+        <div class="topbar-right"><span class="live-indicator"><i></i> API connected</span><span class="avatar">VW</span></div>
+      </header>
+
+      <div id="notice" class="notice" role="status" aria-live="polite"></div>
+      <section id="overview" class="summary-grid" aria-label="Security summary">
+        <article class="summary-card"><div class="card-label">Tracked findings <span class="card-icon blue">⌁</span></div><strong id="total-findings">—</strong><span class="card-foot">All remediation states</span></article>
+        <article class="summary-card"><div class="card-label">Open findings <span class="card-icon orange">◷</span></div><strong id="open-findings">—</strong><span class="card-foot">Require attention</span></article>
+        <article class="summary-card"><div class="card-label">Critical open <span class="card-icon red">!</span></div><strong id="critical-findings">—</strong><span class="card-foot">Highest priority</span></article>
+        <article class="summary-card"><div class="card-label">Managed assets <span class="card-icon green">▦</span></div><strong id="asset-count">—</strong><span class="card-foot">In local inventory</span></article>
+      </section>
+
+      <section class="content-grid">
+        <article class="panel severity-panel">
+          <div class="panel-heading"><div><span class="eyebrow">ACTIVE WORKLOAD</span><h2>Severity distribution</h2></div><span class="subtle">Unresolved findings</span></div>
+          <div id="severity-chart" class="severity-chart"></div>
+          <div class="chart-legend"><span><i class="legend-dot critical"></i>Critical</span><span><i class="legend-dot high"></i>High</span><span><i class="legend-dot medium"></i>Medium</span><span><i class="legend-dot low"></i>Low</span><span><i class="legend-dot unknown"></i>Unknown</span></div>
+        </article>
+        <article class="panel quick-panel">
+          <div class="panel-heading"><div><span class="eyebrow">WORKSPACE SIGNAL</span><h2>Verification status</h2></div><span class="signal-icon">✓</span></div>
+          <div class="verification-number"><strong id="unverified-findings">—</strong><span>unverified asset relationships</span></div>
+          <p>NVD records describe vulnerability intelligence. A finding is marked verified only when an analyst confirms it applies to the selected asset.</p>
+          <a class="text-link" href="#findings">Review findings <span>→</span></a>
+        </article>
+      </section>
+
+      <section id="findings" class="panel findings-panel">
+        <div class="panel-heading findings-heading"><div><span class="eyebrow">REMEDIATION QUEUE</span><h2>Vulnerability findings</h2></div><button class="button button-primary" id="show-finding-form">＋ New finding</button></div>
+        <div class="filters">
+          <label class="search-box"><span>⌕</span><input id="finding-search" type="search" placeholder="Search CVE, title, asset…" aria-label="Search findings"></label>
+          <select id="severity-filter" aria-label="Filter by severity"><option value="">All severities</option><option>Critical</option><option>High</option><option>Medium</option><option>Low</option><option>Unknown</option></select>
+          <select id="status-filter" aria-label="Filter by status"><option value="">All statuses</option><option>Open</option><option>In Progress</option><option>Resolved</option></select>
+        </div>
+        <div class="table-wrap"><table><thead><tr><th>Vulnerability</th><th>Asset</th><th>Severity</th><th>Status</th><th>Verified</th><th>Discovered</th><th>Actions</th></tr></thead><tbody id="findings-table"><tr><td colspan="7" class="empty-state">Loading findings…</td></tr></tbody></table></div>
+      </section>
+
+      <section class="lower-grid">
+        <article id="assets" class="panel">
+          <div class="panel-heading"><div><span class="eyebrow">INVENTORY</span><h2>Assets</h2></div><button class="button button-secondary" id="show-asset-form">＋ Add asset</button></div>
+          <div id="asset-list" class="asset-list"><div class="empty-state">Loading assets…</div></div>
+        </article>
+        <article id="intelligence" class="panel">
+          <div class="panel-heading"><div><span class="eyebrow">OFFICIAL SOURCE</span><h2>NVD intelligence</h2></div><span class="nvd-badge">NVD 2.0</span></div>
+          <form id="nvd-form" class="inline-form"><label class="sr-only" for="nvd-cve">CVE ID</label><input id="nvd-cve" required pattern="CVE-[0-9]{4}-[0-9]{4,}" placeholder="CVE-2021-44228"><button class="button button-primary">Search NVD</button></form>
+          <div id="nvd-result" class="nvd-result"><p class="muted">Look up a CVE ID in the official NVD database. Imported records remain intelligence, not asset findings.</p></div>
+          <div class="imported-heading">Recently imported <button class="link-button" id="refresh-intel">Refresh</button></div>
+          <div id="intel-list" class="intel-list"><div class="empty-state">Loading records…</div></div>
+        </article>
+      </section>
+
+      <section id="imports" class="panel import-panel">
+        <div class="panel-heading"><div><span class="eyebrow">AUTHORIZED LAB INVENTORY</span><h2>Import an existing Nmap scan</h2></div><span class="file-badge">XML</span></div>
+        <div class="import-row"><div><p>Upload an existing Nmap XML output file to add hosts and open services to asset inventory. VulnWatch does not launch scans or infer vulnerabilities from service names or versions.</p><p class="muted">Maximum file size: 5 MB. Use scan files only from environments you are authorized to assess.</p></div><label class="button button-secondary upload-button">Choose XML file<input id="nmap-file" type="file" accept=".xml,text/xml,application/xml"></label></div>
+      </section>
+      <footer>VulnWatch <span>•</span> Local-first vulnerability management</footer>
+    </main>
+  </div>
+
+  <dialog id="finding-dialog" class="modal"><form id="finding-form" method="dialog"><div class="modal-heading"><div><span class="eyebrow">REMEDIATION QUEUE</span><h2>Create finding</h2></div><button type="button" class="icon-button close-dialog" aria-label="Close">×</button></div>
+    <div class="form-grid"><label>CVE ID<input name="cve_id" required pattern="CVE-[0-9]{4}-[0-9]{4,}" placeholder="CVE-2024-12345"></label><label>Affected asset<select name="asset_id" required></select></label><label class="span-two">Title<input name="title" required maxlength="240"></label><label>Severity<select name="severity"><option>Unknown</option><option>Critical</option><option>High</option><option>Medium</option><option>Low</option></select></label><label>CVSS score<input name="cvss_score" type="number" min="0" max="10" step="0.1" placeholder="Optional"></label><label class="span-two">Description<textarea name="description" rows="3" maxlength="12000"></textarea></label><label>Discovered date<input name="discovered_date" type="date" required></label><label class="check-label"><input name="verified" type="checkbox"> I verified this CVE affects this asset</label><label class="span-two">Remediation notes<textarea name="remediation_notes" rows="2" maxlength="12000"></textarea></label></div>
+    <div class="modal-actions"><button type="button" class="button button-secondary close-dialog">Cancel</button><button type="submit" class="button button-primary">Create finding</button></div></form></dialog>
+  <dialog id="detail-dialog" class="modal"><div class="modal-heading"><div><span class="eyebrow">FINDING DETAILS</span><h2 id="detail-title">Finding</h2></div><button type="button" class="icon-button close-dialog" aria-label="Close">×</button></div><div id="detail-content"></div><div class="modal-actions"><button type="button" class="button button-secondary close-dialog">Close</button></div></dialog>
+  <dialog id="asset-dialog" class="modal"><form id="asset-form" method="dialog"><div class="modal-heading"><div><span class="eyebrow">INVENTORY</span><h2>Add asset</h2></div><button type="button" class="icon-button close-dialog" aria-label="Close">×</button></div><div class="form-grid"><label>Asset name<input name="name" required maxlength="160" placeholder="Web server"></label><label>IP address<input name="ip_address" required maxlength="64" placeholder="192.0.2.10"></label><label>Hostname<input name="hostname" maxlength="253"></label><label>Operating system<input name="operating_system" maxlength="160"></label></div><div class="modal-actions"><button type="button" class="button button-secondary close-dialog">Cancel</button><button class="button button-primary">Save asset</button></div></form></dialog>
+</body>
+</html>

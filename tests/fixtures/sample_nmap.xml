@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+<!-- SYNTHETIC TEST DATA ONLY. This fixture was authored for VulnWatch testing; no scan was run. -->
+<!DOCTYPE nmaprun>
+<nmaprun scanner="nmap" args="synthetic test fixture" start="1735689600" startstr="Synthetic test data" version="7.94" xmloutputversion="1.05">
+  <scaninfo type="syn" protocol="tcp" numservices="3" services="22,80,443" />
+  <host>
+    <status state="up" reason="synthetic" reason_ttl="0" />
+    <address addr="192.0.2.10" addrtype="ipv4" />
+    <hostnames>
+      <hostname name="web-lab-01" type="user" />
+    </hostnames>
+    <ports>
+      <port protocol="tcp" portid="22">
+        <state state="open" reason="synthetic" reason_ttl="0" />
+        <service name="ssh" product="Synthetic SSH Service" version="1.0" />
+      </port>
+      <port protocol="tcp" portid="80">
+        <state state="open" reason="synthetic" reason_ttl="0" />
+        <service name="http" product="Synthetic Web Server" version="1.0" />
+      </port>
+      <port protocol="tcp" portid="443">
+        <state state="open" reason="synthetic" reason_ttl="0" />
+        <service name="https" product="Synthetic Web Server" version="1.0" />
+      </port>
+    </ports>
+  </host>
+  <runstats>
+    <finished time="1735689600" timestr="Synthetic test data" elapsed="0.00" summary="Synthetic fixture; no network scan performed." exit="success" />
+    <hosts up="1" down="0" total="1" />
+  </runstats>
+</nmaprun>
